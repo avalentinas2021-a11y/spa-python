@@ -1,4 +1,4 @@
-from Persona import Persona
+from Modelos.Persona import Persona
 
 
 class Profesional(Persona):

@@ -1,8 +1,8 @@
-from Cliente import Cliente
-from Profesional import Profesional
-from Servicio import Servicio
-from Turno import Turno
-
+from Modelos.Cliente import Cliente
+from Modelos.Profesional import Profesional
+from Modelos.Servicio import Servicio
+from Modelos.Turno import Turno
+import Negocio.Negocio as negocio
 
 # Listas donde vamos a guardar nuestros objetos
 clientes = []
@@ -19,37 +19,19 @@ ultimo_id_turno = 0
 
 
 def registrar_cliente():
-    global ultimo_id_cliente
-
     print("\n===== REGISTRAR CLIENTE =====")
-
     nombre = input("Nombre: ")
     apellido = input("Apellido: ")
     dni = input("DNI: ")
     telefono = input("Teléfono: ")
     email = input("Email: ")
 
-    ultimo_id_cliente += 1
-
-    cliente = Cliente(
-        ultimo_id_cliente,
-        nombre,
-        apellido,
-        dni,
-        telefono,
-        email
-    )
-
-    clientes.append(cliente)
-
+    # Mandamos los datos a la capa de negocio
+    negocio.registrar_cliente(nombre, apellido, dni, telefono, email)
     print("\nCliente registrado correctamente.")
 
-
 def registrar_profesional():
-    global ultimo_id_profesional
-
     print("\n===== REGISTRAR PROFESIONAL =====")
-
     nombre = input("Nombre: ")
     apellido = input("Apellido: ")
     dni = input("DNI: ")
@@ -57,52 +39,23 @@ def registrar_profesional():
     email = input("Email: ")
     especialidad = input("Especialidad: ")
 
-    ultimo_id_profesional += 1
-
-    profesional = Profesional(
-        ultimo_id_profesional,
-        nombre,
-        apellido,
-        dni,
-        telefono,
-        email,
-        especialidad
-    )
-
-    profesionales.append(profesional)
-
+    negocio.registrar_profesional(nombre, apellido, dni, telefono, email, especialidad)
     print("\nProfesional registrado correctamente.")
 
-
 def registrar_servicio():
-    global ultimo_id_servicio
-
     print("\n===== REGISTRAR SERVICIO =====")
-
     nombre = input("Nombre del servicio: ")
     descripcion = input("Descripción: ")
     duracion = int(input("Duración en minutos: "))
     precio = float(input("Precio: "))
 
-    ultimo_id_servicio += 1
-
-    servicio = Servicio(
-        ultimo_id_servicio,
-        nombre,
-        descripcion,
-        duracion,
-        precio
-    )
-
-    servicios.append(servicio)
-
+    negocio.registrar_servicio(nombre, descripcion, duracion, precio)
     print("\nServicio registrado correctamente.")
 
-
 def ver_clientes():
-
     print("\n===== CLIENTES =====")
-
+    clientes = negocio.obtener_clientes() # Le pedimos la lista al negocio
+    
     if len(clientes) == 0:
         print("No hay clientes registrados.")
         return
@@ -111,11 +64,10 @@ def ver_clientes():
         cliente.mostrar_datos()
         print("------------------------")
 
-
 def ver_profesionales():
-
     print("\n===== PROFESIONALES =====")
-
+    profesionales = negocio.obtener_profesionales()
+    
     if len(profesionales) == 0:
         print("No hay profesionales registrados.")
         return
@@ -124,8 +76,17 @@ def ver_profesionales():
         profesional.mostrar_datos()
         print("------------------------")
 
-
 def ver_servicios():
+    print("\n===== SERVICIOS =====")
+    servicios = negocio.obtener_servicios()
+    
+    if len(servicios) == 0:
+        print("No hay servicios registrados.")
+        return
+
+    for servicio in servicios:
+        servicio.mostrar_datos()
+        print("------------------------")
 
     print("\n===== SERVICIOS =====")
 
@@ -136,6 +97,8 @@ def ver_servicios():
     for servicio in servicios:
         servicio.mostrar_datos()
         print("------------------------")
+
+
 
 
 def reservar_turno():
