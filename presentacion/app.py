@@ -1,8 +1,13 @@
-from Modelos.Cliente import Cliente
-from Modelos.Profesional import Profesional
-from Modelos.Servicio import Servicio
-from Modelos.Turno import Turno
-import Negocio.Negocio as negocio
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from objetos.Cliente import Cliente
+from objetos.Profesional import Profesional
+from objetos.Servicio import Servicio
+from objetos.Turno import Turno
+import negocio.Negocio as negocio
 
 # Listas donde vamos a guardar nuestros objetos
 clientes = []

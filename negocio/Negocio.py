@@ -1,7 +1,7 @@
-from Modelos.Cliente import Cliente
-from Modelos.Profesional import Profesional
-from Modelos.Servicio import Servicio
-import Datos.Datos as db
+from objetos.Cliente import Cliente
+from objetos.Profesional import Profesional
+from objetos.Servicio import Servicio
+import datos.Datos as db
 
 
 # Listas donde vamos a guardar nuestros objetos

@@ -1,4 +1,4 @@
-from Modelos.Persona import Persona
+from objetos.Persona import Persona
 
 
 class Cliente(Persona):
