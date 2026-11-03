@@ -1,43 +1,45 @@
-from objetos.Cliente import Cliente
-from objetos.Profesional import Profesional
-from objetos.Servicio import Servicio
 import datos.Datos as db
 
 
-# Listas donde vamos a guardar nuestros objetos
-clientes = []
-profesionales = []
-servicios = []
-turnos = []
-
-
-# Contadores para generar los ID
-ultimo_id_cliente = 0
-ultimo_id_profesional = 0
-ultimo_id_servicio = 0
-ultimo_id_turno = 0
-
 def registrar_cliente(nombre, apellido, dni, telefono, email):
-    db.ultimo_id_cliente += 1
-    nuevo_cliente = Cliente(db.ultimo_id_cliente, nombre, apellido, dni, telefono, email)
-    db.clientes.append(nuevo_cliente)
+    return db.registrar_cliente(nombre, apellido, dni, telefono, email)
 
-def registrar_profesional(nombre, apellido, dni, telefono, email, especialidad):
-    db.ultimo_id_profesional += 1
-    nuevo_profesional = Profesional(db.ultimo_id_profesional, nombre, apellido, dni, telefono, email, especialidad)
-    db.profesionales.append(nuevo_profesional)
+
+def registrar_profesional(
+    nombre, apellido, dni, telefono, email, especialidad
+):
+    return db.registrar_profesional(
+        nombre, apellido, dni, telefono, email, especialidad
+    )
+
 
 def registrar_servicio(nombre, descripcion, duracion, precio):
-    db.ultimo_id_servicio += 1
-    nuevo_servicio = Servicio(db.ultimo_id_servicio, nombre, descripcion, duracion, precio)
-    db.servicios.append(nuevo_servicio)
+    return db.registrar_servicio(nombre, descripcion, duracion, precio)
 
-# --- FUNCIONES DE LECTURA ---
+
 def obtener_clientes():
-    return db.clientes
+    return db.obtener_clientes()
+
 
 def obtener_profesionales():
-    return db.profesionales
+    return db.obtener_profesionales()
+
 
 def obtener_servicios():
-    return db.servicios
+    return db.obtener_servicios()
+
+
+def reservar_turno(id_cliente, id_profesional, id_servicio, fecha, hora):
+    if db.horario_ocupado(id_profesional, fecha, hora):
+        raise ValueError("El profesional no está disponible en ese horario.")
+    return db.registrar_turno(
+        id_cliente, id_profesional, id_servicio, fecha, hora
+    )
+
+
+def obtener_turnos():
+    return db.obtener_turnos()
+
+
+def cancelar_turno(id_turno):
+    return db.cancelar_turno(id_turno)

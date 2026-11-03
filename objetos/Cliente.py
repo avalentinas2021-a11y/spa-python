@@ -8,7 +8,6 @@ class Cliente(Persona):
         self.id_cliente = id_cliente
 
     def mostrar_datos(self):
-        print("----- CLIENTE -----")
         print("ID:", self.id_cliente)
         print("Nombre:", self.nombre)
         print("Apellido:", self.apellido)

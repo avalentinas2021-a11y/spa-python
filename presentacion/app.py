@@ -1,27 +1,10 @@
 import sys
 from pathlib import Path
+from datetime import datetime
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from objetos.Cliente import Cliente
-from objetos.Profesional import Profesional
-from objetos.Servicio import Servicio
-from objetos.Turno import Turno
 import negocio.Negocio as negocio
-
-# Listas donde vamos a guardar nuestros objetos
-clientes = []
-profesionales = []
-servicios = []
-turnos = []
-
-
-# Contadores para generar los ID
-ultimo_id_cliente = 0
-ultimo_id_profesional = 0
-ultimo_id_servicio = 0
-ultimo_id_turno = 0
-
 
 def registrar_cliente():
     print("\n===== REGISTRAR CLIENTE =====")
@@ -107,9 +90,11 @@ def ver_servicios():
 
 
 def reservar_turno():
-    global ultimo_id_turno
-
     print("\n===== RESERVAR TURNO =====")
+
+    clientes = negocio.obtener_clientes()
+    profesionales = negocio.obtener_profesionales()
+    servicios = negocio.obtener_servicios()
 
     if len(clientes) == 0:
         print("No hay clientes registrados.")
@@ -201,33 +186,20 @@ def reservar_turno():
 
     fecha = input("Fecha (DD/MM/AAAA): ")
     hora = input("Hora (HH:MM): ")
+    fecha = datetime.strptime(fecha, "%d/%m/%Y").date()
+    hora = datetime.strptime(hora, "%H:%M").time()
 
-    # Verificar si el profesional ya tiene un turno
-    # en esa fecha y horario
-    for turno in turnos:
-
-        if (
-            turno.profesional.id_profesional == id_profesional
-            and turno.fecha == fecha
-            and turno.hora == hora
-            and turno.estado == "Activo"
-        ):
-            print("\nEl profesional no está disponible en ese horario.")
-            return
-
-    ultimo_id_turno += 1
-
-    turno = Turno(
-        ultimo_id_turno,
-        cliente_seleccionado,
-        profesional_seleccionado,
-        servicio_seleccionado,
-        fecha,
-        hora,
-        "Activo"
-    )
-
-    turnos.append(turno)
+    try:
+        negocio.reservar_turno(
+            cliente_seleccionado.id_cliente,
+            profesional_seleccionado.id_profesional,
+            servicio_seleccionado.id_servicio,
+            fecha,
+            hora,
+        )
+    except ValueError as error:
+        print(f"\n{error}")
+        return
 
     print("\nTurno registrado correctamente.")
 
@@ -235,6 +207,8 @@ def reservar_turno():
 def ver_turnos():
 
     print("\n===== TURNOS =====")
+
+    turnos = negocio.obtener_turnos()
 
     if len(turnos) == 0:
         print("No hay turnos registrados.")
@@ -248,6 +222,8 @@ def ver_turnos():
 def cancelar_turno():
 
     print("\n===== CANCELAR TURNO =====")
+
+    turnos = negocio.obtener_turnos()
 
     if len(turnos) == 0:
         print("No hay turnos registrados.")
@@ -270,20 +246,22 @@ def cancelar_turno():
 
     id_turno = int(input("\nSeleccione el ID del turno: "))
 
-    for turno in turnos:
+    turno = next(
+        (turno for turno in turnos if turno.id_turno == id_turno),
+        None,
+    )
+    if turno is None:
+        print("Turno no encontrado.")
+        return
 
-        if turno.id_turno == id_turno:
+    if turno.estado == "Cancelado":
+        print("El turno ya está cancelado.")
+        return
 
-            if turno.estado == "Cancelado":
-                print("El turno ya está cancelado.")
-                return
-
-            turno.cancelar()
-
-            print("Turno cancelado correctamente.")
-            return
-
-    print("Turno no encontrado.")
+    if negocio.cancelar_turno(id_turno):
+        print("Turno cancelado correctamente.")
+    else:
+        print("No se pudo cancelar el turno.")
 
 
 def mostrar_menu():
