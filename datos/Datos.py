@@ -12,7 +12,7 @@ from objetos.Turno import Turno
 
 RUTA_BASE_DATOS = Path(
     os.getenv(
-        "SPA_DB_PATH",
+        "SPA_DB",
         Path(__file__).resolve().parents[1] / "spa.db",
     )
 )

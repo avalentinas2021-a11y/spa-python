@@ -76,16 +76,6 @@ def ver_servicios():
         servicio.mostrar_datos()
         print("------------------------")
 
-    print("\n===== SERVICIOS =====")
-
-    if len(servicios) == 0:
-        print("No hay servicios registrados.")
-        return
-
-    for servicio in servicios:
-        servicio.mostrar_datos()
-        print("------------------------")
-
 
 
 
